@@ -151,15 +151,19 @@
     document
       .getElementById("message-input")
       .addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           sendMessage();
         }
       });
 
     function sendMessage() {
+      // Get the text from the textarea
+      const textarea = document.getElementById("message-input");
+      const message = textarea.value;
+      textarea.value = "";
       var newDiv = document.createElement("div");
-      newDiv.className = "d-flex flex-row p-3";
+      newDiv.className = "d-flex flex-row ";
       newDiv.innerHTML = `
         <div
             class="response d-flex flex-row p-3"
@@ -167,7 +171,7 @@
             >
             <div class="bg-white mr-2 p-3">
               <span class=" " style="font-size: 15px"
-                >Hello and thank you for visiting birdlynind.</span
+                >${message}</span
               >
             </div>
             <img
@@ -180,6 +184,22 @@
 
       // Append the new div to the chat container
       document.getElementById("chat-container").appendChild(newDiv);
+
+      fetch("{% url 'generate_response' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{csrf_token}}",
+        },
+        body: JSON.stringify({ query: message }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("success: ", data);
+        })
+        .catch((error) => {
+          console.log("error: ", error);
+        });
     }
   </script>
 </html>
