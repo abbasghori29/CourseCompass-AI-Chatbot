@@ -104,35 +104,6 @@
               technology!
             </div>
           </div>
-
-          {% comment %}
-          <div
-            class="response d-flex flex-row p-3"
-            style="margin-left: auto !important"
-          >
-            <div class="bg-white mr-2 p-3">
-              <span class=" " style="font-size: 15px"
-                >Hello and thank you for visiting birdlynind.</span
-              >
-            </div>
-            <img
-              src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png"
-              width="30"
-              height="30"
-            />
-          </div>
-          {% endcomment %}
-
-          <div class="d-flex flex-row p-3">
-            <img
-              src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png"
-              width="30"
-              height="30"
-            />
-            <div class="chat ml-2 p-3">
-              <span class="text-muted dot">. . .</span>
-            </div>
-          </div>
         </div>
 
         <div class="form-group px-3">
@@ -181,9 +152,24 @@
             />
           </div>
       `;
-
-      // Append the new div to the chat container
       document.getElementById("chat-container").appendChild(newDiv);
+
+      var responseDiv = document.createElement("div");
+
+      responseDiv.innerHTML = `
+        <div class="d-flex flex-row p-3">
+        <img
+          src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png"
+          width="30"
+          height="30"
+        />
+        <div class="chat ml-2 p-3">
+          <span class="" id="resp" style="font-size: 15px !important">. . .</span>
+        </div>
+      </div>
+      `;
+
+      document.getElementById("chat-container").appendChild(responseDiv);
 
       fetch("{% url 'generate_response' %}", {
         method: "POST",
@@ -196,6 +182,8 @@
         .then((response) => response.json())
         .then((data) => {
           console.log("success: ", data);
+          res = document.getElementById("resp");
+          res.textContent = data["response"];
         })
         .catch((error) => {
           console.log("error: ", error);
