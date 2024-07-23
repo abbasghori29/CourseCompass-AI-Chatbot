@@ -75,6 +75,25 @@
       height: 400px; /* Adjust the height as needed */
       overflow-y: scroll;
     }
+    /* Scrollbar track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    /* Scrollbar handle */
+    ::-webkit-scrollbar-thumb {
+      background: #87d37c;
+    }
+
+    /* Scrollbar handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: green;
+    }
+
+    /* Scrollbar itself */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
   </style>
   <body>
     <div class="container d-flex justify-content-center">
@@ -155,7 +174,7 @@
       document.getElementById("chat-container").appendChild(newDiv);
 
       var responseDiv = document.createElement("div");
-
+      const responseId = "resp-" + Date.now();
       responseDiv.innerHTML = `
         <div class="d-flex flex-row p-3">
         <img
@@ -164,7 +183,7 @@
           height="30"
         />
         <div class="chat ml-2 p-3">
-          <span class="" id="resp" style="font-size: 15px !important">. . .</span>
+          <span class="" id="${responseId}" style="font-size: 15px !important">. . .</span>
         </div>
       </div>
       `;
@@ -182,7 +201,7 @@
         .then((response) => response.json())
         .then((data) => {
           console.log("success: ", data);
-          res = document.getElementById("resp");
+          res = document.getElementById(responseId);
           res.textContent = data["response"];
         })
         .catch((error) => {
